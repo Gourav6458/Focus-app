@@ -1,294 +1,259 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Focus Mode</title>
-  <link rel="manifest" href="manifest.json">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <title>YouTube</title>
+
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
-      min-height: 100vh;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient();
-      color: #ffffff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
-      overflow-x: hidden;
+      margin: 0;
+      font-family: Arial;
+      background: #0f0f0f;
+      color: white;
+      text-align: center;
     }
 
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 600;
-      letter-spacing: -0.5px;
-      margin-bottom: 10px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .subtitle {
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 0.95rem;
-      margin-bottom: 40px;
-    }
-
-    .glass-card {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 24px;
-      padding: 32px;
-      width: 100%;
-      max-width: 420px;
-      margin-bottom: 24px;
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    }
-
-    .card-title {
-      font-size: 1.1rem;
-      font-weight: 500;
-      margin-bottom: 20px;
-      color: rgba(255, 255, 255, 0.9);
+    header {
+      background: #111;
+      padding: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #ff0000;
     }
 
     input {
-      width: 100%;
-      padding: 14px 18px;
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(0, 0, 0, 0.2);
-      color: #ffffff;
-      font-size: 1rem;
-      font-family: inherit;
-      outline: none;
-      transition: all 0.2s ease;
-    }
-
-    input::placeholder {
-      color: rgba(255, 255, 255, 0.3);
-    }
-
-    input:focus {
-      border-color: rgba(102, 126, 234, 0.5);
-      background: rgba(0, 0, 0, 0.3);
+      padding: 12px;
+      width: 260px;
+      border-radius: 20px;
+      border: none;
+      margin-top: 15px;
+      background: #1f1f1f;
+      color: white;
     }
 
     button {
-      width: 100%;
-      padding: 14px 24px;
-      margin-top: 16px;
-      border-radius: 14px;
+      padding: 10px 18px;
+      margin-top: 10px;
+      border-radius: 20px;
       border: none;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #ff0000;
       color: white;
-      font-weight: 500;
-      font-size: 1rem;
-      font-family: inherit;
+      font-weight: bold;
+    }
+
+    .section {
+      margin-top: 30px;
+    }
+
+    .video {
+      margin: 10px auto;
+      width: 80%;
+      padding: 12px;
+      background: #1f1f1f;
+      border-radius: 10px;
       cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      text-align: left;
     }
 
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    .counter {
+      margin-top: 10px;
+      color: #ff0000;
+      font-size: 18px;
     }
 
-    button:active {
-      transform: translateY(0);
+    .timer {
+      font-size: 28px;
+      margin-top: 10px;
     }
 
-    .timer-display {
-      font-size: 4rem;
-      font-weight: 300;
-      letter-spacing: -2px;
-      margin: 20px 0 10px 0;
-      font-variant-numeric: tabular-nums;
-      background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.7) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .mode {
+      opacity: 0.7;
     }
 
-    .mode-label {
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 24px;
-    }
-
-    .timer-controls {
-      display: flex;
-      gap: 12px;
-    }
-
-    .timer-controls button {
-      flex: 1;
-      margin-top: 0;
-    }
-
-    .timer-controls button.secondary {
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: none;
-    }
-
-    .timer-controls button.secondary:hover {
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    .icon {
-      font-size: 1.5rem;
-      margin-bottom: 8px;
-    }
-
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 2rem;
-      }
-
-      .timer-display {
-        font-size: 3rem;
-      }
-
-      .glass-card {
-        padding: 24px;
-      }
+    .warning {
+      color: #ff4d4d;
+      margin-top: 10px;
     }
   </style>
 </head>
 
 <body>
 
-  <h1>⚡ Focus Mode</h1>
-  <p class="subtitle">Stay productive, one session at a time</p>
+<header style="display:flex; align-items:center; justify-content:center; gap:10px; background:#111; padding:15px;">
 
-  <div class="glass-card">
-    <div class="icon">📚</div>
-    <h3 class="card-title">What do you want to learn?</h3>
-    <input id="topic" placeholder="e.g. Newton's Laws">
-    <button onclick="openYT()">Search YouTube</button>
+  <!-- YouTube Logo -->
+  <div style="
+    width:28px;
+    height:20px;
+    background:#ff0000;
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  ">
+    <div style="
+      width:0;
+      height:0;
+      border-left:10px solid white;
+      border-top:6px solid transparent;
+      border-bottom:6px solid transparent;
+      margin-left:2px;
+    "></div>
   </div>
 
-  <div class="glass-card">
-    <div class="icon">⏱️</div>
-    <div class="timer-display" id="timer">30:00</div>
-    <div class="mode-label" id="mode">Study Time</div>
-    <div class="timer-controls">
-      <button onclick="startTimer()" id="startBtn">Start</button>
-      <button onclick="resetTimer()" class="secondary">Reset</button>
-    </div>
-  </div>
+  <!-- Text -->
+  <span style="font-size:20px; font-weight:bold; color:white;">
+    FocusTube
+  </span>
 
-  <div class="glass-card">
-    <div class="icon">🔔</div>
-    <h3 class="card-title">Set Reminder</h3>
-    <input id="reminderTime" placeholder="Minutes (e.g. 20)">
-    <button onclick="setReminder()">Set Reminder</button>
-  </div>
+</header>
 
-  <script>
-    let studyTime = 30 * 60;
-    let breakTime = 5 * 60;
-    let isStudy = true;
-    let interval;
-    let isRunning = false;
+<!-- SEARCH -->
+<div class="section">
+  <input id="topic" placeholder="Search topic"><br>
+  <button onclick="handleSearch()">Search</button>
+  <div class="warning" id="warning"></div>
+</div>
 
-    function startTimer() {
-      if (isRunning) {
+<!-- VIDEO COUNT -->
+<div class="counter">
+  Videos Watched: <span id="count">0</span>
+</div>
+
+<!-- VIDEO LIST -->
+<div id="videos"></div>
+
+<!-- TIMER -->
+<div class="section">
+  <div class="timer" id="timer">30:00</div>
+  <div class="mode" id="mode">Study Time</div>
+  <button onclick="startTimer()">Start Session</button>
+</div>
+
+<!-- REMINDER -->
+<div class="section">
+  <input id="reminderTime" placeholder="Reminder (min)">
+  <br>
+  <button onclick="setReminder()">Set Reminder</button>
+</div>
+
+<script>
+let count = localStorage.getItem("videoCount") || 0;
+document.getElementById("count").innerText = count;
+
+// 🎯 KEYWORD FILTER SEARCH
+function handleSearch() {
+  let topic = document.getElementById("topic").value.toLowerCase().trim();
+  let warning = document.getElementById("warning");
+
+  if (!topic) {
+    alert("Enter topic!");
+    return;
+  }
+
+  let keywords = [
+    "course","class 10","class 9","icse",
+    "math","maths","physics","chem","chemistry",
+    "bio","biology","tutorial","lecture",
+    "beginner","advanced","exphub","shobhit"
+  ];
+
+  let isValid = keywords.some(word => topic.includes(word));
+
+  if (isValid) {
+    generateVideos(topic);
+  } else {
+    warning.innerText = "⚠ Non-study search detected. Waiting 10 sec...";
+
+    let time = 10;
+    let interval = setInterval(() => {
+      warning.innerText = "⚠ Opening in " + time + " sec...";
+      time--;
+
+      if (time < 0) {
         clearInterval(interval);
-        isRunning = false;
-        document.getElementById("startBtn").innerText = "Resume";
-        return;
+        warning.innerText = "";
+        generateVideos(topic);
       }
+    }, 1000);
+  }
+}
 
-      isRunning = true;
-      document.getElementById("startBtn").innerText = "Pause";
+// 🎥 VIDEO GENERATOR
+function generateVideos(topic) {
+  let container = document.getElementById("videos");
+  container.innerHTML = "";
 
-      let time = isStudy ? studyTime : breakTime;
+  for (let i = 1; i <= 5; i++) {
+    let div = document.createElement("div");
+    div.className = "video";
+    div.innerText = topic + " - Video " + i;
 
-      interval = setInterval(() => {
-        let minutes = Math.floor(time / 60);
-        let seconds = time % 60;
+    div.onclick = function () {
+      count++;
+      localStorage.setItem("videoCount", count);
+      document.getElementById("count").innerText = count;
 
-        document.getElementById("timer").innerText =
-          minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+      window.location.href =
+        "https://www.youtube.com/results?search_query=" +
+        encodeURIComponent(topic) +
+        "&sp=EgIQAQ%253D%253D";
+    };
 
-        time--;
+    container.appendChild(div);
+  }
+}
 
-        if (time < 0) {
-          clearInterval(interval);
-          isRunning = false;
+// ⏱️ TIMER SYSTEM
+let study = 30 * 60;
+let brk = 5 * 60;
+let isStudy = true;
+let timerInterval;
 
-          if (isStudy) {
-            alert("🎉 Break Time! Take 5 minutes to recharge.");
-          } else {
-            alert("📚 Back to Study! Let's stay focused.");
-          }
+function startTimer() {
+  clearInterval(timerInterval);
 
-          isStudy = !isStudy;
-          document.getElementById("mode").innerText = isStudy ? "Study Time" : "Break Time";
-          document.getElementById("timer").innerText = isStudy ? "30:00" : "05:00";
-          document.getElementById("startBtn").innerText = "Start";
-        }
-      }, 1000);
+  let time = isStudy ? study : brk;
+
+  timerInterval = setInterval(() => {
+    let m = Math.floor(time / 60);
+    let s = time % 60;
+
+    document.getElementById("timer").innerText =
+      m + ":" + (s < 10 ? "0" : "") + s;
+
+    time--;
+
+    if (time < 0) {
+      clearInterval(timerInterval);
+
+      alert(isStudy ? "Break Time!" : "Back to Study!");
+
+      isStudy = !isStudy;
+      document.getElementById("mode").innerText =
+        isStudy ? "Study Time" : "Break Time";
+
+      startTimer();
     }
 
-    function resetTimer() {
-      clearInterval(interval);
-      isRunning = false;
-      isStudy = true;
-      document.getElementById("timer").innerText = "30:00";
-      document.getElementById("mode").innerText = "Study Time";
-      document.getElementById("startBtn").innerText = "Start";
-    }
+  }, 1000);
+}
 
-    function openYT() {
-      let topic = document.getElementById("topic").value;
+// 🔔 REMINDER
+function setReminder() {
+  let mins = document.getElementById("reminderTime").value;
 
-      if (topic.trim() === "") {
-        alert("Enter a topic first!");
-        return;
-      }
+  if (!mins) {
+    alert("Enter time");
+    return;
+  }
 
-      let confirmOpen = confirm("Open YouTube for this topic?");
+  setTimeout(() => {
+    alert("Reminder: Back to focus!");
+  }, mins * 60000);
 
-      if (!confirmOpen) return;
-
-      setTimeout(() => {
-        window.open(
-          "https://www.youtube.com/results?search_query=" + encodeURIComponent(topic),
-          "_blank"
-        );
-      }, 1000);
-    }
-
-    function setReminder() {
-      let mins = document.getElementById("reminderTime").value;
-
-      if (!mins || mins <= 0) {
-        alert("Enter a valid time in minutes");
-        return;
-      }
-
-      setTimeout(() => {
-        alert("⏰ Reminder: Get back to focus!");
-      }, mins * 60 * 1000);
-
-      alert("Reminder set for " + mins + " minutes!");
-    }
-  </script>
+  alert("Reminder set!");
+}
+</script>
 
 </body>
 </html>
