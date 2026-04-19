@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>YouTube Focus</title>
+   <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png">
+  <link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png">
+  <meta name="apple-mobile-web-app-title" content="YouTube Focus">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: "Orbitron";
+      background: #0f0f0f !important ;
+      color: #f1f1f1;
+      min-height: 100vh;
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
+    /* ===== LANDING PAGE ===== */
+    .landing-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .landing-title {
+      font-size: 24px;
+      font-weight: 500;
+      color: #f1f1f1;
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    .mode-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      max-width: 280px;
+    }
+
+    .mode-btn {
+      padding: 16px 32px;
+      border-radius: 24px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      text-align: center;
+      text-decoration: none;
+      width: 100%;
+    }
+
+    .casual-btn {
+      background: #272727;
+      color: #f1f1f1;
+    }
+
+    .casual-btn:active {
+      background: #3f3f3f;
+    }
+
+    .focus-btn {
+      background: #cc0000;
+      color: white;
+    }
+
+    .focus-btn:active {
+      background: #990000;
+    }
+
+    /* ===== FOCUS MODE PAGE ===== */
+    .focus-page {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .focus-page.active {
+      display: block;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0f0f0f;
+      padding: 0 12px;
+      height: 56px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      border-bottom: 1px solid #272727;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+    }
+
+    .youtube-logo {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 22px;
+      background: #ff0000;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon::after {
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 10px solid white;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      margin-left: 2px;
+    }
+
+    .logo-text {
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: -1px;
+    }
+
+    /* Search Bar */
+    .search-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      margin: 0 12px;
+    }
+
+    .search-box {
+      display: flex;
+      flex: 1;
+      background: #121212;
+      border: 1px solid #303030;
+      border-radius: 40px 0 0 40px;
+      padding: 0 12px;
+      height: 36px;
+      align-items: center;
+    }
+
+    .search-box:focus-within {
+      border-color: #1c62b9;
+    }
+
+    #searchInput {
+      background: transparent;
+      border: none;
+      color: #f1f1f1;
+      font-size: 14px;
+      width: 100%;
+      outline: none;
+    }
+
+    #searchInput::placeholder {
+      color: #888;
+    }
+
+    .search-btn {
+      background: #222;
+      border: 1px solid #303030;
+      border-left: none;
+      border-radius: 0 40px 40px 0;
+      width: 48px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #f1f1f1;
+    }
+
+    .search-btn:active {
+      background: #303030;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-top: 56px;
+      padding: 16px 12px;
+    }
+
+    /* Warning Box */
+    .warning-box {
+      background: #282828;
+      border: 1px solid #3ea6ff;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .warning-box.active {
+      display: block;
+    }
+
+    .warning-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .warning-icon {
+      color: #3ea6ff;
+      font-size: 18px;
+    }
+
+    .warning-text {
+      color: #f1f1f1;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .warning-countdown {
+      color: #aaa;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .warning-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .warning-btn {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      flex: 1;
+    }
+
+    .continue-btn {
+      background: #3ea6ff;
+      color: #0f0f0f;
+    }
+
+    .continue-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .cancel-btn {
+      background: #272727;
+      color: #f1f1f1;
+    }
+
+    /* Search Hint */
+    .search-hint {
+      background: #1f1f1f;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .hint-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #f1f1f1;
+      margin-bottom: 10px;
+    }
+
+    .hint-text {
+      font-size: 13px;
+      color: #aaa;
+      line-height: 1.5;
+    }
+
+    .hint-keywords {
+      color: #3ea6ff;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <!-- LANDING PAGE -->
+  <div class="landing-page" id="landingPage">
+    <h1 class="landing-title">Choose Your Mode</h1>
+    <div class="mode-buttons">
+      <button class="mode-btn casual-btn" onclick="openCasualMode()">Casual Mode</button>
+      <button class="mode-btn focus-btn" onclick="openFocusMode()">Focus Mode</button>
+    </div>
+  </div>
+
+  <!-- FOCUS MODE PAGE -->
+  <div class="focus-page" id="focusPage">
+    <header>
+      <div class="logo-section">
+        <div class="youtube-logo" onclick="goToLanding()">
+          <div class="logo-icon"></div>
+          <span class="logo-text">YouTube</span>
+        </div>
+      </div>
+      <div class="search-container">
+        <div class="search-box">
+          <input id="searchInput" placeholder="Search" type="text">
+        </div>
+        <button class="search-btn" onclick="handleSearch()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <!-- Warning Box -->
+      <div class="warning-box" id="warningBox">
+        <div class="warning-title">
+          <span class="warning-icon">ℹ️</span>
+          <span class="warning-text">Non-study search detected</span>
+        </div>
+        <div class="warning-countdown" id="warningCountdown"></div>
+        <div class="warning-buttons">
+          <button class="warning-btn continue-btn" id="continueBtn" onclick="continueSearch()">Continue Anyway</button>
+          <button class="warning-btn cancel-btn" onclick="cancelSearch()">Cancel Search</button>
+        </div>
+      </div>
+
+      <!-- Search Hint -->
+      <div class="search-hint" id="searchHint">
+        <div class="hint-title">Focus Search</div>
+        <div class="hint-text">
+          Search for study-related content only.<br>
+          Allowed keywords: <span class="hint-keywords">class 9, class 10, ICSE, physics, chemistry, maths, biology, lecture, tutorial, course, study</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let pendingQuery = '';
+    let countdownInterval = null;
+    let countdownTime = 10;
+
+    // Study-related keywords
+    const studyKeywords = [
+      "course", "class 10", "class 9", "icse", "cbse", "ncert",
+      "math", "maths", "mathematics", "physics", "chem", "chemistry",
+      "bio", "biology", "tutorial", "lecture", "study", "education",
+      "learning", "exam", "test", "notes", "chapter", "solution",
+      "beginner", "advanced", "academic", "school", "college", "university"
+    ];
+
+    // Open Casual Mode - opens regular YouTube
+    function openCasualMode() {
+      window.location.href = "https://www.youtube.com";
+    }
+
+    // Open Focus Mode - shows the search interface (NOT ReVanced yet)
+    function openFocusMode() {
+      document.getElementById("landingPage").style.display = "none";
+      document.getElementById("focusPage").classList.add("active");
+    }
+
+    // Go back to landing page
+    function goToLanding() {
+      document.getElementById("focusPage").classList.remove("active");
+      document.getElementById("landingPage").style.display = "flex";
+      cancelSearch();
+      document.getElementById("searchInput").value = "";
+    }
+
+    // Check if search is study-related
+    function isStudyRelated(query) {
+      const lowerQuery = query.toLowerCase().trim();
+      return studyKeywords.some(keyword => lowerQuery.includes(keyword.toLowerCase()));
+    }
+
+    // Redirect to YouTube search via ReVanced
+    function redirectToYouTube(query) {
+      const encodedQuery = encodeURIComponent(query);
+      window.location.href = `intent://www.youtube.com/results?search_query=${encodedQuery}#Intent;package=app.revanced.android.youtube;scheme=https;end`;
+    }
+
+    // Handle search
+    function handleSearch() {
+      const query = document.getElementById("searchInput").value.trim();
+      if (!query) return;
+
+      if (isStudyRelated(query)) {
+        redirectToYouTube(query);
+      } else {
+        showWarning(query);
+      }
+    }
+
+    // Show warning with countdown
+    function showWarning(query) {
+      pendingQuery = query;
+      const warningBox = document.getElementById("warningBox");
+      const warningCountdown = document.getElementById("warningCountdown");
+      const continueBtn = document.getElementById("continueBtn");
+      const searchHint = document.getElementById("searchHint");
+
+      warningBox.classList.add("active");
+      searchHint.style.display = "none";
+
+      countdownTime = 10;
+      updateCountdownDisplay();
+
+      continueBtn.disabled = true;
+      continueBtn.style.opacity = "0.5";
+      continueBtn.style.cursor = "not-allowed";
+
+      countdownInterval = setInterval(() => {
+        countdownTime--;
+        updateCountdownDisplay();
+
+        if (countdownTime <= 0) {
+          clearInterval(countdownInterval);
+          continueBtn.disabled = false;
+          continueBtn.style.opacity = "1";
+          continueBtn.style.cursor = "pointer";
+          warningCountdown.textContent = "You can now continue to search";
+        }
+      }, 1000);
+    }
+
+    // Update countdown display
+    function updateCountdownDisplay() {
+      const warningCountdown = document.getElementById("warningCountdown");
+      if (countdownTime > 0) {
+        warningCountdown.textContent = `Please wait ${countdownTime} seconds before continuing...`;
+      }
+    }
+
+    // Continue search after countdown
+    function continueSearch() {
+      if (countdownTime > 0) return;
+      if (pendingQuery) {
+        redirectToYouTube(pendingQuery);
+      }
+    }
+
+    // Cancel search
+    function cancelSearch() {
+      clearInterval(countdownInterval);
+      countdownInterval = null;
+      pendingQuery = "";
+      countdownTime = 10;
+
+      document.getElementById("warningBox").classList.remove("active");
+      document.getElementById("searchHint").style.display = "block";
+      document.getElementById("searchInput").value = "";
+      document.getElementById("searchInput").focus();
+    }
+
+    // Allow Enter key to search
+    document.getElementById("searchInput").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        handleSearch();
+      }
+    });
+  </script>
+</body>
+</html>
