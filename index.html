@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>YouTube Focus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Orbitron:wght@400..900&family=Oswald:wght@200..700&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
    <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png">
   <link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png">
@@ -19,13 +22,91 @@
     }
 
     body {
-      font-family: "Orbitron";
-      background: #0f0f0f !important ;
+      font-family: "Nunito";
+      background-color: #385170;
       color: #f1f1f1;
       min-height: 100vh;
       max-width: 100vw;
       overflow-x: hidden;
     }
+  @keyframes gradientMove {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 0% 100%; }
+  100% { background-position: 0% 0%; }
+}
+  
+  /* Hamburger */
+.hamburger {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 30px;
+  height: 25px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+/* lines */
+.hamburger span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: white;
+  margin: 5px 0;
+  border-radius: 2px;
+  transition: 0.3s ease;
+}
+  .hamburger.active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+  
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -250px; /* hidden */
+  width: 250px;
+  height: 100%;
+  background: rgba(122, 0, 0, 0.75);
+  backdrop-filter: blur(15px);
+  backdrop-filter: blur(10px);
+  padding-top: 60px;
+  opacity: 0;
+  transition: right 0.4s ease, opacity 0.4s ease;
+  z-index: 999;
+}
+
+/* Open state */
+.sidebar.active {
+  right: 0;
+  opacity: 1;
+  
+}
+
+/* Links */
+.sidebar a {
+  display: block;
+  padding: 15px 25px;
+  color: white;
+  text-decoration: none;
+  font-size: 25px;
+  transition: 1s ease;
+}
+
+.sidebar a:hover {
+  background: rgba(255,255,255,0.3);
+  border-radius: 20px;
+  scale: 1.1;
+}
 
     /* ===== LANDING PAGE ===== */
     .landing-page {
@@ -38,50 +119,80 @@
     }
 
     .landing-title {
-      font-size: 24px;
-      font-weight: 500;
-      color: #f1f1f1;
+      font-size: 45px;
+      font-decoration: underlined;
+      font-weight: 900;
+      /* Glass effect */
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  /* Border glow */
+
+  /* Text */
+  color: white;
+
+  /* Soft glow */
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
       margin-bottom: 48px;
       text-align: center;
     }
+.mode-btn {
+  position: relative;
+  overflow: hidden;
 
-    .mode-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      width: 100%;
-      max-width: 280px;
-    }
+  padding: 16px 32px;
+  margin: 15px;
+  border-radius: 24px;
+  font-size: 25px;
+  font-family: "Nunito";
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  width: 100%;
+  color: white;
 
-    .mode-btn {
-      padding: 16px 32px;
-      border-radius: 24px;
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      border: none;
-      text-align: center;
-      text-decoration: none;
-      width: 100%;
-    }
+  background: rgba(255,255,255,0.05);
 
-    .casual-btn {
-      background: #272727;
-      color: #f1f1f1;
-    }
+  /* 🔥 REAL liquid glass */
+  backdrop-filter: url(#frosted);
+  -webkit-backdrop-filter: url(#frosted);
 
-    .casual-btn:active {
-      background: #3f3f3f;
-    }
+  /* glass border + depth */
+  box-shadow: 
+    0 0 0 1px rgba(255,255,255,0.5),
+    0 10px 25px rgba(0,0,0,0.4);h
 
-    .focus-btn {
-      background: #cc0000;
-      color: white;
-    }
+  transition: 0.3s ease;
+}
+.mode-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 50%;
+  width: 100%;
+  border-radius: 24px;
+}
+.mode-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 
+    0 0 0 1px rgba(255,255,255,0.8),
+    0 15px 35px rgba(0,0,0,0.5);
+}
 
-    .focus-btn:active {
-      background: #990000;
-    }
+.mode-btn:active {
+  transform: scale(0.96);
+}
+  
+}
+.casual-btn {
+  color: #f1f1f1;
+}
+
+.focus-btn {
+  color: white;
+}
 
     /* ===== FOCUS MODE PAGE ===== */
     .focus-page {
@@ -304,15 +415,37 @@
   </style>
 </head>
 <body>
+  <!-- Hamburger Icon -->
+<div class="hamburger" onclick="toggleMenu()">
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+
+<!-- Sidebar Menu -->
+<div id="sidebar" class="sidebar">
+  <a href="#">Home</a>
+  <a href="#">Settings</a>
+  <a href="#">About</a>
+</div>
+  
   <!-- LANDING PAGE -->
   <div class="landing-page" id="landingPage">
-    <h1 class="landing-title">Choose Your Mode</h1>
+    <h1 class="landing-title">Welcome,
+      Choose Your Mode</h1>
     <div class="mode-buttons">
-      <button class="mode-btn casual-btn" onclick="openCasualMode()">Casual Mode</button>
-      <button class="mode-btn focus-btn" onclick="openFocusMode()">Focus Mode</button>
+      <button class="mode-btn casual-btn" onclick="openCasualMode()">▶️❤️Casual Mode</button>
+      <button class="mode-btn focus-btn" onclick="openFocusMode()">🎯🪃Focus Mode</button>
     </div>
   </div>
 
+  <svg width="0" height="0">
+  <filter id="frosted">
+    <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="2" seed="2"/>
+    <feDisplacementMap in="SourceGraphic" scale="20"/>
+  </filter>
+</svg>
+  
   <!-- FOCUS MODE PAGE -->
   <div class="focus-page" id="focusPage">
     <header>
@@ -361,6 +494,12 @@
   </div>
 
   <script>
+  
+function toggleMenu() {
+  document.getElementById("sidebar").classList.toggle("active");
+  document.querySelector(".hamburger").classList.toggle("active");
+}
+  
     let pendingQuery = '';
     let countdownInterval = null;
     let countdownTime = 10;
